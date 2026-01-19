@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакти — Васильківська 27</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="index.html">Головна</a>
+            <a href="booking.html">Квартири</a>
+            <a href="contacts.html">Контакти</a>
+        </nav>
+    </header>
+
+<section>
+    <h1>Наші об'єкти</h1>
+
+    <div class="apartment-section">
+        <h2>Вул. Васильківська 27</h2>
+        <div class="slideshow">
+            <img src="images/w1.jpg" class="slide">
+            <img src="images/w3.jpg" class="slide">
+            <img src="images/w4.jpg" class="slide">
+        </div>
+        <button class="book-btn" onclick="openForm('Васильківська 27')">Забронювати</button>
+    </div>
+
+    <div class="apartment-section">
+        <h2>пров. Леопольда Ященка 15</h2>
+        <div class="slideshow">
+            <img src="images/g2.jpg" class="slide">
+            <img src="images/g3.jpg" class="slide">
+            <img src="images/g4.jpg" class="slide">
+        </div>
+        <button class="book-btn" onclick="openForm('Ященка 15')">Забронювати</button>
+    </div>
+
+    <div class="apartment-section">
+        <h2>вул. Юлії Зданоської 30/1</h2>
+        <div class="slideshow">
+            <img src="images/l3.jpg" class="slide">
+            <img src="images/l4.jpg" class="slide">
+            <img src="images/l5.jpg" class="slide">
+            <img src="images/l6.jpg" class="slide">
+        </div>
+        <button class="book-btn" onclick="openForm('Зданоської 30/1')">Забронювати</button>
+    </div>
+</section>
+
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeForm()">&times;</span>
+        <h3 id="modalTitle">Бронювання</h3>
+        <form id="bookForm">
+            <label>Ваш номер телефону:</label>
+            <input type="tel" placeholder="+380..." required>
+            
+            <label>Дата заїзду:</label>
+            <input type="date" required>
+            
+            <label>Дата виїзду:</label>
+            <input type="date" required>
+            
+            <button type="submit" class="submit-btn">Відправити запит</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openForm(aptName) {
+        document.getElementById('bookingModal').style.display = "block";
+        document.getElementById('modalTitle').innerText = "Бронювання: " + aptName;
+    }
+    function closeForm() {
+        document.getElementById('bookingModal').style.display = "none";
+    }
+</script>
