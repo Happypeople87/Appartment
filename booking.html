@@ -1,84 +1,75 @@
-<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Бронювання</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронювання - Happy People</title>
     <style>
-        .submit-btn { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 10px; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .apt-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; background: #fff; }
+        .submit-btn { background-color: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .submit-btn:hover { background-color: #218838; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        #status { margin-top: 15px; font-weight: bold; color: #007bff; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Наші об'єкти</h1>
-</header>
-
-<section>
-    <h2>Вул. Васильківська 27</h2>
-    <button type="button" class="submit-btn" onclick="openForm('Васильківська 27')">Відправити запит</button>
+<div class="container">
+    <h1>Бронювання квартир</h1>
     
-    <h2>пров. Леопольда Ященка 15</h2>
-    <button type="button" class="submit-btn" onclick="openForm('Ященка 15')">Відправити запит</button>
-    
-    <h2>вул. Юлії Здановської 30/1</h2>
-    <button type="button" class="submit-btn" onclick="openForm('Здановської 30/1')">Відправити запит</button>
-</section>
-
-<div id="bookingModal" class="modal">
-    <div class="modal-content">
-        <span style="cursor:pointer; float:right;" onclick="closeForm()">&times;</span>
-        <h3>Бронювання</h3>
-        <p id="aptName"></p>
-        <form id="bookForm">
-            <label>Ваше ім'я:</label><br>
-            <input type="text" id="userName" placeholder="Ім'я" required><br><br>
-            <label>Ваш номер телефону:</label><br>
-            <input type="tel" id="userPhone" placeholder="+380..." required><br><br>
-            <button type="button" class="submit-btn" onclick="sendTelegram()">Відправити запит</button>
-        </form>
+    <div class="apt-card">
+        <h3>Вул. Васильківська 27</h3>
+        <input type="text" id="name1" placeholder="Ваше ім'я">
+        <input type="tel" id="phone1" placeholder="Ваш телефон">
+        <button type="button" class="submit-btn" onclick="sendTelegram('Васильківська 27', 'name1', 'phone1')">Забронювати</button>
     </div>
+
+    <div class="apt-card">
+        <h3>Пров. Леопольда Ященка 15</h3>
+        <input type="text" id="name2" placeholder="Ваше ім'я">
+        <input type="tel" id="phone2" placeholder="Ваш телефон">
+        <button type="button" class="submit-btn" onclick="sendTelegram('Ященка 15', 'name2', 'phone2')">Забронювати</button>
+    </div>
+
+    <div id="status"></div>
 </div>
 
 <script>
-    let currentApt = "";
-
-    function openForm(apt) {
-        currentApt = apt;
-        document.getElementById("aptName").innerText = "Об'єкт: " + apt;
-        document.getElementById("bookingModal").style.display = "block";
-    }
-
-    function closeForm() {
-        document.getElementById("bookingModal").style.display = "none";
-    }
-
-    function sendTelegram() {
-        const token = "8512473782:AAEvTKcutAiO5NBlqrtmCHNtUKMeyeYT5wI";
+    function sendTelegram(aptName, nameId, phoneId) {
+        // Твій справжній токен зі скріншотів
+        const token = "8124573782:AAEvTKcutAiO5NBlqrtmCHNtUKMeyeYT5wI";
         const chatId = "539470569";
         
-        const name = document.getElementById("userName").value;
-        const phone = document.getElementById("userPhone").value;
+        const name = document.getElementById(nameId).value;
+        const phone = document.getElementById(phoneId).value;
+        const statusDiv = document.getElementById('status');
 
         if (!name || !phone) {
-            alert("Будь ласка, заповніть всі поля!");
+            alert("Жека, заповни всі поля!");
             return;
         }
 
-        const message = `🚀 Нове бронювання!\n🏠 Об'єкт: ${currentApt}\n👤 Ім'я: ${name}\n📞 Тел: ${phone}`;
+        statusDiv.innerText = "Відправка...";
+
+        const message = `🚀 Нове замовлення!\n🏠 Об'єкт: ${aptName}\n👤 Клієнт: ${name}\n📞 Тел: ${phone}`;
         const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
         fetch(url)
-            .then(response => {
-                if (response.ok) {
-                    alert("Запит у боті! Жека, перевіряй телеграм!");
-                    closeForm();
+            .then(res => {
+                if(res.ok) {
+                    statusDiv.innerText = "✅ Запит у боті! Перевіряй телефон.";
+                    alert("Успішно відправлено!");
                 } else {
-                    alert("Помилка відправки. Перевір токен!");
+                    statusDiv.innerText = "❌ Помилка. Перевір токен бота!";
+                    console.log(res);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(err => {
+                statusDiv.innerText = "❌ Помилка мережі";
+                console.error(err);
+            });
     }
 </script>
 
