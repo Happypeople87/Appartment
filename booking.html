@@ -25,8 +25,7 @@
             <img src="images/w1.jpg" class="slide">
             <img src="images/w3.jpg" class="slide">
             <img src="images/w4.jpg" class="slide">
-        </div>
-        <button class="book-btn" onclick="openForm('Васильківська 27')">Забронювати</button>
+        </div>    <button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
     </div>
 
     <div class="apartment-section">
@@ -36,7 +35,7 @@
             <img src="images/g3.jpg" class="slide">
             <img src="images/g4.jpg" class="slide">
         </div>
-        <button class="book-btn" onclick="openForm('Ященка 15')">Забронювати</button>
+       <button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
     </div>
 
     <div class="apartment-section">
@@ -47,7 +46,7 @@
             <img src="images/l5.jpg" class="slide">
             <img src="images/l6.jpg" class="slide">
         </div>
-        <button class="book-btn" onclick="openForm('Зданоської 30/1')">Забронювати</button>
+<button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
     </div>
 </section>
 
@@ -65,17 +64,35 @@
             <label>Дата виїзду:</label>
             <input type="date" required>
             
-            <button type="submit" class="submit-btn">Відправити запит</button>
+            <button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
         </form>
     </div>
 </div>
-
 <script>
-    function openForm(aptName) {
-        document.getElementById('bookingModal').style.display = "block";
-        document.getElementById('modalTitle').innerText = "Бронювання: " + aptName;
-    }
-    function closeForm() {
-        document.getElementById('bookingModal').style.display = "none";
-    }
-</script>
+        function sendTelegram() {
+            const token = "8512473782:AAEvTKcutAIo5NBlqrtmCHntUKMeyeYT5wI";
+            const chatId = "539470569";
+
+            // Логіка збору даних
+            const nameInput = document.querySelector('input[placeholder="Ваше ім\'я"]');
+            const phoneInput = document.querySelector('input[placeholder="Ваш телефон"]');
+
+            if (!nameInput || !phoneInput) {
+                console.error("Поля не знайдені!");
+                return;
+            }
+
+            const name = nameInput.value;
+            const phone = phoneInput.value;
+
+            const message = `🚀 Нове бронювання!\n👤 Ім'я: ${name}\n📞 Телефон: ${phone}`;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url).then(res => {
+                if(res.ok) alert("Запит у боті!");
+                else alert("Помилка. Перевір токен!");
+            });
+        }
+    </script>
+</body>
+</html>
