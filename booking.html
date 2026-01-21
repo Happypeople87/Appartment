@@ -2,97 +2,85 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Контакти — Васильківська 27</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Бронювання</title>
+    <style>
+        .submit-btn { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .modal { display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 10px; }
+    </style>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <a href="index.html">Головна</a>
-            <a href="booking.html">Квартири</a>
-            <a href="contacts.html">Контакти</a>
-        </nav>
-    </header>
+<header>
+    <h1>Наші об'єкти</h1>
+</header>
 
 <section>
-    <h1>Наші об'єкти</h1>
-
-    <div class="apartment-section">
-        <h2>Вул. Васильківська 27</h2>
-        <div class="slideshow">
-            <img src="images/w1.jpg" class="slide">
-            <img src="images/w3.jpg" class="slide">
-            <img src="images/w4.jpg" class="slide">
-        </div>    <button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
-    </div>
-
-    <div class="apartment-section">
-        <h2>пров. Леопольда Ященка 15</h2>
-        <div class="slideshow">
-            <img src="images/g2.jpg" class="slide">
-            <img src="images/g3.jpg" class="slide">
-            <img src="images/g4.jpg" class="slide">
-        </div>
-       <button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
-    </div>
-
-    <div class="apartment-section">
-        <h2>вул. Юлії Зданоської 30/1</h2>
-        <div class="slideshow">
-            <img src="images/l3.jpg" class="slide">
-            <img src="images/l4.jpg" class="slide">
-            <img src="images/l5.jpg" class="slide">
-            <img src="images/l6.jpg" class="slide">
-        </div>
-<button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
-    </div>
+    <h2>Вул. Васильківська 27</h2>
+    <button type="button" class="submit-btn" onclick="openForm('Васильківська 27')">Відправити запит</button>
+    
+    <h2>пров. Леопольда Ященка 15</h2>
+    <button type="button" class="submit-btn" onclick="openForm('Ященка 15')">Відправити запит</button>
+    
+    <h2>вул. Юлії Здановської 30/1</h2>
+    <button type="button" class="submit-btn" onclick="openForm('Здановської 30/1')">Відправити запит</button>
 </section>
 
 <div id="bookingModal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeForm()">&times;</span>
-        <h3 id="modalTitle">Бронювання</h3>
+        <span style="cursor:pointer; float:right;" onclick="closeForm()">&times;</span>
+        <h3>Бронювання</h3>
+        <p id="aptName"></p>
         <form id="bookForm">
-            <label>Ваш номер телефону:</label>
-            <input type="tel" placeholder="+380..." required>
-            
-            <label>Дата заїзду:</label>
-            <input type="date" required>
-            
-            <label>Дата виїзду:</label>
-            <input type="date" required>
-            
-            <button> type="button" class="submit-btn" class="submit-btn" onclick="sendTelegram()" "Відправити запит</button>
+            <label>Ваше ім'я:</label><br>
+            <input type="text" id="userName" placeholder="Ім'я" required><br><br>
+            <label>Ваш номер телефону:</label><br>
+            <input type="tel" id="userPhone" placeholder="+380..." required><br><br>
+            <button type="button" class="submit-btn" onclick="sendTelegram()">Відправити запит</button>
         </form>
     </div>
 </div>
+
 <script>
-        function sendTelegram() {
-            const token = "8512473782:AAEvTKcutAIo5NBlqrtmCHntUKMeyeYT5wI";
-            const chatId = "539470569";
+    let currentApt = "";
 
-            // Логіка збору даних
-            const nameInput = document.querySelector('input[placeholder="Ваше ім\'я"]');
-            const phoneInput = document.querySelector('input[placeholder="Ваш телефон"]');
+    function openForm(apt) {
+        currentApt = apt;
+        document.getElementById("aptName").innerText = "Об'єкт: " + apt;
+        document.getElementById("bookingModal").style.display = "block";
+    }
 
-            if (!nameInput || !phoneInput) {
-                console.error("Поля не знайдені!");
-                return;
-            }
+    function closeForm() {
+        document.getElementById("bookingModal").style.display = "none";
+    }
 
-            const name = nameInput.value;
-            const phone = phoneInput.value;
+    function sendTelegram() {
+        const token = "8512473782:AAEvTKcutAiO5NBlqrtmCHNtUKMeyeYT5wI";
+        const chatId = "539470569";
+        
+        const name = document.getElementById("userName").value;
+        const phone = document.getElementById("userPhone").value;
 
-            const message = `🚀 Нове бронювання!\n👤 Ім'я: ${name}\n📞 Телефон: ${phone}`;
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-
-            fetch(url).then(res => {
-                if(res.ok) alert("Запит у боті!");
-                else alert("Помилка. Перевір токен!");
-            });
+        if (!name || !phone) {
+            alert("Будь ласка, заповніть всі поля!");
+            return;
         }
-    </script>
+
+        const message = `🚀 Нове бронювання!\n🏠 Об'єкт: ${currentApt}\n👤 Ім'я: ${name}\n📞 Тел: ${phone}`;
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    alert("Запит у боті! Жека, перевіряй телеграм!");
+                    closeForm();
+                } else {
+                    alert("Помилка відправки. Перевір токен!");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
 </body>
 </html>
